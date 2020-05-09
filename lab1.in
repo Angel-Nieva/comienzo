@@ -1,0 +1,10 @@
+#lang racket
+;TDA: ZONAS DE TRABAJO
+;constructores
+(define workspace(list "str1" )) 
+(define index(list null))
+(define local_repository (list null))
+(define remote_repository (list null))
+(define zonas (list workspace index local_repository remote_repository))
+
+(define index?(lambda x (if (eq? x index) 0 1)) )
