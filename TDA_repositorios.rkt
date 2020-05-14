@@ -1,0 +1,11 @@
+#lang racket
+;TDA Repositorios:
+;Esta corresponden a las 4 zonas de trabajo: Workspace,Index,Local Repository y Remote Repository donde basicamente cada zona es una lista de listas.
+
+(define constructor_repositorio (lambda (workspace index local_repository remote_repository)(list "repositorio 1" "Fecha" workspace index local_repository remote_repository)))
+
+(define constructor_workspace(lambda (codigo)(list codigo)))
+(define constructor_index(lambda (codigo)(list codigo)))
+(define constructor_local_repository(lambda (commit)(list commit)))
+(define constructor_remote_repository(lambda (commit)(list commit)))
+                              
