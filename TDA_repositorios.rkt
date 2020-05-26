@@ -17,15 +17,6 @@
 ;Ej: (list commit1 commit2 .... commitN)
 
 ;----------------------------------------------------------------CONSTRUCTORES------------------------------------------------------------------------------------
-;Funciones que construyen un workspace,index,local repository,remote repository,rama,lista funciones
-;Entrada: workspace,index,local repository,remote repository,rama,lista funciones
-;(define repositorio_cons_rama (lambda (rama)(if (string? rama) rama null)))
-;(define repositorio_cons_workspace (lambda (workspace) (if (lista_string? workspace) workspace null )))
-;(define repositorio_cons_index (lambda (index) (if (lista_string? index) index null )))
-;(define repositorio_cons_local_rep (lambda (local_rep)(if (lista_commit? local_rep) local_rep null)))
-;(define repositorio_cons_remote_rep (lambda (remote_rep)(if (lista_commit? remote_rep) remote_rep null)))
-;(define repositorio_cons_funciones (lambda (funciones)(if (lista_string? funciones) funciones null)))
-
 ;Funcion que construye un repositorio
 ;Entrada: workspace,index,local repository,remote repository,rama,lista funciones
 ;Salida: lista con los datos ingresados si son todos correctos, null en caso contrario
@@ -50,34 +41,83 @@
 (define funciones? (lambda (funciones)(lista_string? funciones)))
 
 (define repository? (lambda (repositorio)
-            (if (and (rama? (list-ref 0))(workspace? (list-ref 1))(index? (list-ref 2))(local_repository? (list-ref 3))(remote_repository? (list-ref 4))(funciones? (list-ref 5)))
+            (if (and (list? repositorio)(rama? (list-ref repositorio 0))(workspace? (list-ref repositorio 1))(index? (list-ref repositorio 2))(local_repository? (list-ref repositorio 3))
+                     (remote_repository? (list-ref repositorio 4))(funciones? (list-ref repositorio 5)))
                 #t
                 #f
             )
       )
 )
 
-;----------------------------------------------------------------SELECTORES----------------------------------------------------------------------------;
-(define repositorio_get_ramificacion (lambda (repositorio)(if (repository? repositorio)(list-ref repositorio 0) null)))
-(define repositorio_get_workspace (lambda (repositorio) (if (repository? repositorio)(list-ref repositorio 1) null)))
-(define repositorio_get_index (lambda (repositorio)(if (repository? repositorio)(list-ref repositorio 2) null)))
-(define repositorio_get_local_rep (lambda (repositorio)(if (repository? repositorio)(list-ref repositorio 3) null)))
-(define repositorio_get_remote_rep (lambda (repositorio)(if (repository? repositorio)(list-ref repositorio 4) null)))
-(define repositorio_get_funciones (lambda (repositorio)(if (repository? repositorio)(list-ref repositorio 5) null)))
+;----------------------------------------------------------------SELECTORES-------------------------------------------------------------------------------;
+;Funciones que nos retornan un elemento del repositorio
+;Entrada: repositorio
+;Salida: ramificacion,workspace,repositorio local,repositorio remoto o funciones, null en caso de que la entrada no corresponda a un repositorio
+(define rep_get_ramificacion (lambda (repositorio)(if (repository? repositorio) (list-ref repositorio 0) null)))
+(define rep_get_workspace (lambda (repositorio) (if (repository? repositorio) (list-ref repositorio 1) null)))
+(define rep_get_index (lambda (repositorio)(if (repository? repositorio) (list-ref repositorio 2) null)))
+(define rep_get_local_rep (lambda (repositorio)(if (repository? repositorio) (list-ref repositorio 3) null)))
+(define rep_get_remote_rep (lambda (repositorio)(if (repository? repositorio) (list-ref repositorio 4) null)))
+(define rep_get_funciones (lambda (repositorio)(if (repository? repositorio) (list-ref repositorio 5) null)))
+
+;----------------------------------------------------------------MODIFICADORES----------------------------------------------------------------------------;
+;Funciones que crean un nuevo repositorio con un elemento cambiado, ya sea ramificacion,workspace,index,repositorio local,repositorio remoto o lista de funciones.
+;Entrada: nueva ramificacion,workspace,index,repositorio local,repositorio remoto o lista de funciones
+;Salida: Nuevo repositorio actualizado
+
+(define rep_set_ramificacion (lambda (repo new_rami)
+               (if (repository? repo)
+                   (cons_repositorio new_rami(rep_get_workspace repo)(rep_get_index repo)(rep_get_local_rep repo)(rep_get_remote_rep repo)(rep_get_funciones repo) )
+                   null
+                )                          
+        )
+)
+
+(define rep_set_workspace (lambda (repo new_works)
+               (if (repository? repo)
+                   (cons_repositorio (rep_get_ramificacion repo) new_works (rep_get_index repo)(rep_get_local_rep repo)(rep_get_remote_rep repo)(rep_get_funciones repo) )
+                   null
+                )                          
+        )
+)
+
+(define rep_set_index (lambda (repo new_index)
+               (if (repository? repo)
+                   (cons_repositorio (rep_get_ramificacion repo)(rep_get_workspace repo) new_index (rep_get_local_rep repo)(rep_get_remote_rep repo)(rep_get_funciones repo))
+                   null
+                )                          
+        )
+)
+
+(define rep_set_local_rep (lambda (repo new_local)
+               (if (repository? repo)
+                   (cons_repositorio (rep_get_ramificacion repo)(rep_get_workspace repo)(rep_get_index repo) new_local (rep_get_remote_rep repo)(rep_get_funciones repo))
+                   null
+                )                          
+        )
+)
+
+(define rep_set_remote_rep (lambda (repo new_remote)
+               (if (repository? repo)
+                   (cons_repositorio (rep_get_ramificacion repo)(rep_get_workspace repo)(rep_get_index repo)(rep_get_local_rep repo) new_remote (rep_get_funciones repo))
+                   null
+                )                          
+        )
+)
+
+(define rep_set_funciones (lambda (repo new_funciones)
+               (if (repository? repo)
+                   (cons_repositorio (rep_get_ramificacion repo)(rep_get_workspace repo)(rep_get_index repo)(rep_get_local_rep repo)(rep_get_remote_rep repo) new_funciones)
+                   null
+                )                          
+        )
+)
 
 
 
 
 
-
-
-
-
-
-
-
-;(define constructor_local_repository(lambda (commit)(list commit)))
-;(define constructor_remote_repository(lambda (commit)(list commit)))
+;(define repo1 (cons_repositorio "master" '("asd" "asd") '() '() '() '()))
 
 
                               
