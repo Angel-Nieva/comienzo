@@ -1,11 +1,11 @@
 #lang racket
-(provide lista_string? current-date date->string )
+(provide lista_string? current-date date->string)
 
 
 
 ;=================================================== OTRAS FUNCIONES===============================================================================;
 
-;Funcion que verifica recursivamente si una lista esta compuesta unicamente por string o esta vacia
+;Funcion que verifica recursivamente(normal) si una lista esta compuesta unicamente por string o esta vacia
 (define lista_string? (lambda (lista)
                (if (null? lista)  ;Si el primer elemento de la lista es null retorna #t
                    #t
