@@ -1,6 +1,7 @@
 #lang racket
 (require "TDA_otros.rkt")
 (require "TDA_commit.rkt")
+(provide repository? cons_repositorio rep_get_workspace rep_set_index)
 ;TDA REPOSITORIO: Lista compuesta por las 4 zonas de trabajo, rama actual (master rama origen) y un listado con las funciones usadas sobre la rama.
 ;Ej: (list master workspace index local_repository remote_repository (push add pull))
 
@@ -63,7 +64,7 @@
 ;----------------------------------------------------------------MODIFICADORES----------------------------------------------------------------------------;
 ;Funciones que crean un nuevo repositorio con un elemento cambiado, ya sea ramificacion,workspace,index,repositorio local,repositorio remoto o lista de funciones.
 ;Entrada: nueva ramificacion,workspace,index,repositorio local,repositorio remoto o lista de funciones
-;Salida: Nuevo repositorio actualizado
+;Salida: Nuevo repositorio actualizado, null en caso de que la entrada no corresponda a un repositorio
 
 (define rep_set_ramificacion (lambda (repo new_rami)
                (if (repository? repo)
@@ -117,7 +118,7 @@
 
 
 
-;(define repo1 (cons_repositorio "master" '("asd" "asd") '() '() '() '()))
+(define repo1 (cons_repositorio "master" '("asd" "asd") '() '() '() '("add" "push" "commit")))
 
 
                               

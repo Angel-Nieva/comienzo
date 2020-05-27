@@ -1,35 +1,28 @@
 #lang racket
 ;TDA Comandos: nos permiten trabajar entre las zonas de trabajo, por lo que seran puramente funciones
 
-;La funcion git es un tipo de funcion de pertenencia, tiene como parametro una funcion y en cao de que el parametro no corresponda a una funcion retorna #f
+
+
+
+;Funcion currificada que recive una funcion y el parametro de esta
+
 (define git (lambda (funcion)
-              (if (= (funcion? (funcion)) #t) 
-                  (lambda (parametros)(funcion parametros))
-                  #f
+              (lambda (parametros)
+                   (lambda (parametros)(funcion parametros))       
               )    
-            )
+       )
 )
 
-;Pregunta si un parametro es una funcion, retorna true si corresponde a alguna de las funciones o false si no
-(define funcion? (lambda(funcion)
-                   (if (= #t (or (pull? funcion)(add? funcion)(commit? funcion)(push? funcion)) )
-                       #t
-                       #f
-                    )
+
+
+;Git: Funcion que recibe una lista con los nombres de los archivos en workspace y los lleva a index, si la lista esta vacia lleva todos los archivos en index
+
+(define add (lambda (lista)
+             (lambda (zonas)
+                  (if (repositorio? zonas)
+                      #t
+                      #f
                   )
+             )     
+       )
 )
-
-;----------------------------------------------------------;
-;Funciones pre-disenañas para trabajar con listas infinitas
-(define-syntax lazy-cons (syntax-rules ()
-((_ <car-expr> <cdr-expr>)
-(delay (cons <car-expr> <cdr-expr>))) ))
-
-(define lazy-null? (lambda (ll) (null? (force ll))))
-
-(define lazy-car (lambda (ll) (car (force ll))))
-
-(define lazy-cdr (lambda (ll) (cdr (force ll))))
-;-----------------------------------------------------------;
-
-

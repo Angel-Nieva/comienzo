@@ -9,21 +9,23 @@
 
 ;-------------------------------------------------------------------CONSTRUCTORES----------------------------------------------------------------------------------;
 
-;Funcion para construir un commit
+;Funcion que construye un commit con los datatos ingresados
+;Entrada: nombre del crador, comentario del commit, lista con los archivos, identificador del commit anterior
+;Salida: si los datos son correctos retorna un commit, en caso contrario retorna null
 (define cons_commit (lambda (nombre comentario lista_archivos id_anterior)
                     (if (and (string? nombre) (string? comentario) (lista_string? lista_archivos) (integer? id_anterior))
                        (list nombre (random 10000) (date->string (current-date) second) comentario lista_archivos id_anterior)
                        null
                     )   
            )
-);EJ: (cons_commic "Angel" "Mi primer commit" '("str1" "str2" "str3") 0)
-
+)
 ;--------------------------------------------------------------------PERTENENCIA------------------------------------------------------------------------------------;
 ;Funcion que verifica que sea un commit revisando los elementos del commit
 ;Entrada: commit
 ;Salida: #t si corresponde a un commit, #f en caso contrario
 (define commit? (lambda (commit)
-    (if (and (list? commit)(string? (list-ref commit 0))(integer? (list-ref commit 1))(string? (list-ref commit 2))(string? (list-ref commit 3))(lista_string? (list-ref commit 4))(integer? (list-ref commit 5)))
+    (if (and (list? commit)(string? (list-ref commit 0))(integer? (list-ref commit 1))(string? (list-ref commit 2))(string? (list-ref commit 3))
+             (lista_string? (list-ref commit 4))(integer? (list-ref commit 5)))
       #t
       #f
     )  
@@ -40,7 +42,10 @@
                )         
         )
 )
+;-------------------------------------------------------------------SELECTORES---------------------------------------------------------------------------------------;
+(define com_get_archivos (lambda (commit)(if (commit? commit) (list-ref commit 4) null)))
+(define com_get_id (lambda (commit)(if (commit? commit) (list-ref commit 1) null)))
 
-
-(define a (list "Angel" 432 "Monday, May 18th, 2020 7:30:18pm" "mi primer commit" '("str1") 0) )
-(define b (list "Marcelo" 432 "Monday, May 18th, 2020 7:30:18pm" "mi primer commit" '("str1") 0))
+;(define a (list "Angel" 432 "Monday, May 18th, 2020 7:30:18pm" "mi primer commit" '("str1") 0) )
+;(define b (list "Marcelo" 432 "Monday, May 18th, 2020 7:30:18pm" "mi primer commit" '("str1") 0))
+(define commit1 (cons_commit "Angel" "Mi primer commit" '("str1" "str2" "str3") 0))
