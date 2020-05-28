@@ -1,6 +1,7 @@
 #lang racket
 (require "TDA_otros.rkt")
 (provide commit? lista_commit?)
+(provide cons_commit)
 ;TDA commit
 ;Los commit seran representado como una lista de 6 elementos, cada elemento representara una parte del commic:
 ; nombre del autor, identificador, fecha y hora, mensaje descriptivo, cambios almacenados(lista con los nombres de los archivos) y el identificador del commit anterior

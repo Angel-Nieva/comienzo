@@ -28,7 +28,7 @@
            )
 )
 
-;Funcion que compara si los elementos de una lista se encuentran en otra
+;Funcion que compara si los elementos de una lista se encuentran en otra recorriendo la lista recursivamente(normal)
 ;Entrada: listas
 ;Salida: #t si los elementos de una lista se encuentran en la otra, #f en caso contrario
 (define comparar_archivos_lista (lambda (lista_archivos lista)
