@@ -1,7 +1,11 @@
 #lang racket
 (require "TDA_otros.rkt")
 (require "TDA_commit.rkt")
-(provide repository? cons_repositorio rep_get_workspace rep_set_index)
+(provide repository? cons_repositorio) ;Usados en el programa en general
+(provide rep_get_workspace rep_set_workspace) ;Usados en funcion ADD
+(provide rep_get_index rep_set_index);Usados en funcion ADD
+(provide rep_get_funciones rep_set_funciones)
+
 ;TDA REPOSITORIO: Lista compuesta por las 4 zonas de trabajo, rama actual (master rama origen) y un listado con las funciones usadas sobre la rama.
 ;Ej: (list master workspace index local_repository remote_repository (push add pull))
 

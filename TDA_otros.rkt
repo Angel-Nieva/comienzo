@@ -1,5 +1,5 @@
 #lang racket
-(provide lista_string? current-date date->string)
+(provide lista_string? current-date date->string comparar_archivo_lista comparar_archivos_lista)
 
 
 
@@ -20,10 +20,10 @@
 ;Funcion que recorre recursivamente(normal) una lista y compara cada elemento con un string
 ;Entrada: workspace, string
 ;Salida: #t si se encuentra el string en el workspace, #f en caso contrario
-(define comparar_archivo_workspace (lambda (archivo workspace)
-                        (if (null? workspace)
+(define comparar_archivo_lista (lambda (archivo lista)
+                        (if (null? lista)
                             #f
-                            (or (equal? archivo (car workspace))(comparar_archivo_workspace archivo (cdr workspace)))
+                            (or (equal? archivo (car lista))(comparar_archivo_lista archivo (cdr lista)))
                          )
            )
 )
@@ -31,10 +31,10 @@
 ;Funcion que compara si los elementos de una lista se encuentran en otra
 ;Entrada: listas
 ;Salida: #t si los elementos de una lista se encuentran en la otra, #f en caso contrario
-(define comparar_archivos_workspace (lambda (lista_archivos workspace)
+(define comparar_archivos_lista (lambda (lista_archivos lista)
                        (if (null? lista_archivos)
                            #t
-                           (and (comparar_archivo_workspace (car lista_archivos) workspace)(comparar_archivos_workspace (cdr lista_archivos) workspace))
+                           (and (comparar_archivos_lista (cdr lista_archivos) lista)(comparar_archivo_lista (car lista_archivos) lista))
                        )
            )
 )
@@ -44,7 +44,6 @@
 
 
 
+(define a (list "a" "b" "d" "asd" "asd"))
 
-
-
-(define lis (list "b" "a" "c"))
+(define lis (list "d"))
