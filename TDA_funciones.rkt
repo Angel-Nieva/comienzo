@@ -66,7 +66,7 @@
 )             
 
 (define commit-no-curry (lambda (mensaje zonas)
-        (rep_set_index (rep_set_local_rep zonas (append (rep_get_local_rep zonas) (crear_commit mensaje zonas) )) '( ) ) ;Se vacia el index 
+        (rep_set_index (rep_set_local_rep zonas (append (rep_get_local_rep zonas) (list (crear_commit mensaje zonas)) )) '( ) ) ;Se vacia el index 
     )
 ) 
 
@@ -77,17 +77,20 @@
 ;Entrada: mensaje(string), repositorio
 ;Salida: si los archivos son correctos entrega un nuevo repositorio con un commit ingresados en el repositorio local, sino se despliega un mensaje
 (define commit (lambda (mensaje)
-                    (lambda (zonas)
-                         (if (and (string? mensaje)(repository? zonas))
-                               (rep_set_funciones (commit-no-curry mensaje zonas) "commit" );Se deja registro de la funcion "commit"
-                               "Error en el ingreso de datos"
-                        )     
-                )
-        ) 
+                  (lambda (zonas)
+                      (if (and (string? mensaje)(repository? zonas))
+                            (if (null? (rep_get_index zonas)) ;Si el index esta vacio se retorna la zona como esta
+                                zonas
+                               (rep_set_funciones (commit-no-curry mensaje zonas) (append (rep_get_funciones zonas) '("commit")) );Se deja registro de la funcion "commit"
+                            )
+                            "Error en el ingreso de datos"
+                      )     
+              )
+      ) 
 )
 
 
 ;(rep_set_index zonas archivos)
 ;(((git add)'("asd" "asd"))repo1)
 (define commit1 (cons_commit "angel" "" '() 0))
-(define repo1 (list "master" '("asd" "str1" "str2") '("str1") '() '() '()))
+(define repo1 (list "master" '("asd" "str1" "str2") '("str1") '() '() '("add")))

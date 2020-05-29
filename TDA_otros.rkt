@@ -58,9 +58,6 @@
 
 
 
-
-
-
 (define a (list "a" "b" "d" "asd" "asd"))
 
 (define lis (list "d"))
