@@ -139,18 +139,55 @@
 ;Salida: si los datos de entrada son correctos pregunta si el repositorio remoto esta vacio. Si se encuentra vacio retorna zonas sin cambios, sino retorna una nueva version del repositorio.
 ;        si los datos de entrada no son correctos retorna un mensaje 
 (define pull (lambda (zonas)
-              (if (repository? zonas) ;Pregunta si el dato ingresado es un repositorio
-                      (if (null? (rep_get_remote_rep zonas)) ;Si el repositorio remoto esta vacio retorna las zonas sin cambios
-                          zonas
-                          (rep_set_funciones (pull_archivos zonas) (append (rep_get_funciones zonas)'("pull"))) ;Se deja registro de la funcion
-                      )
-                      "Error en el ingreso de datos"
-               )
-       )
+               (if (repository? zonas) ;Pregunta si el dato ingresado es un repositorio
+                       (if (null? (rep_get_remote_rep zonas)) ;Si el repositorio remoto esta vacio retorna las zonas sin cambios
+                           zonas
+                           (rep_set_funciones (pull_archivos zonas) (append (rep_get_funciones zonas)'("pull"))) ;Se deja registro de la funcion
+                       )
+                       "Error en el ingreso de datos"
+                )
+        )
+)
+;------------------------------------------------------------------ZONAS->STRING---------------------------------------------------------------------------------;
+;(define entregar-visualizacion)
+;(define mostrar-remote (lambda (zonas)(mostrar_index zonas (append '("\nREPOSITORIO LOCAL:\n")(rep_get_local_rep zonas)))))
+;(define mostrar-local (lambda (zonas)(mostrar_index zonas (append '("\nREPOSITORIO LOCAL:\n")(rep_get_local_rep zonas)))))
+;(define mostrar-index (lambda (zonas)(mostrar_index zonas (append '("\nINDEX:\n")(rep_get_index zonas)))))
+;(define mostrar-workspace (lambda (zonas)(mostrar_index zonas (append '("WORKSPACE:\n")(rep_get_workspace zonas)))))
+(define mostar_archivos (lambda (zona archivos)
+                  (if (null? zona)
+                      (append archivos '("\n"))
+                      (mostar_archivos (cdr zona) (append archivos '("\n") (list (car zona))))
+                  )
+         )
 )
 
+(define mostar_commits (lambda (zona commits)
+                  (if (null? zona)
+                      (append commits '("\n"))
+                      (mostar_commits (cdr zona) (append commits '("\n") (list (car zona))))
+                  )
+         )
+)
 
-#| probando con funciones
+(define mostrar_zonas (lambda (zonas)
+             (append '("====================================================================================================================================================================") 
+                     '("\nWORKSPACE:\n") (mostar_archivos (rep_get_workspace zonas) '())
+                     '("\nINDEX:\n") ( mostar_archivos (rep_get_index zonas) '())
+                     '("\nREPOSITORIO LOCAL:\n")(mostar_commits (rep_get_local_rep zonas) '())
+                     '("\nREPOSITORIO REMOTO:\n")(mostar_commits (rep_get_local_rep zonas) '())
+                     '("\n=====================================================================================================================================================================") 
+              )    
+      )
+)
+(define zonas->string (lambda (zonas)
+               (if (repository? zonas)         
+                 (display (mostrar_zonas zonas))
+                  "Error en el ingreso de datos"
+               )  
+        )
+)
+#|
 (define repo1 (list "master" '("hola.c") '("hola.c") '() '() '("add")))
 (define repo2 '("master" ("hola.c") () (("Angel" 3447 "Saturday, May 30th, 2020 12:13:24am" "Micom" ("hola.c") 0)) () ("add" "commit")))
 (define repo3 '("master"
@@ -161,11 +198,12 @@
   ("add" "commit" "push")))
 
 (define repo4 '("master"
-  ("hola.c")
+  ("hola.c" "chao.c" "mundo.c" "saul.c")
   ()
-  (("Angel" 3447 "Saturday, May 30th, 2020 12:13:24am" "Micom" ("hola.c") 0))
-  (("Angel" 3447 "Saturday, May 30th, 2020 12:13:24am" "Micom" ("hola.c") 0))
+  (("Angel" 3447 "Saturday, May 30th, 2020 12:13:24am" "Micom" ("hola.c") 0)("Angel" 3447 "Saturday, May 30th, 2020 12:13:24am" "Micom" ("hola.c") 0)("Angel" 3447 "Saturday, May 30th, 2020 12:13:24am" "Micom" ("hola.c") 0)("Angel" 3447 "Saturday, May 30th, 2020 12:13:24am" "Micom" ("hola.c") 0))
+  (("Angel" 3447 "Saturday, May 30th, 2020 12:13:24am" "Micom" ("hola.c") 0)("Angel" 3447 "Saturday, May 30th, 2020 12:13:24am" "Micom" ("hola.c") 0))
   ("add" "commit" "push" "pull")))
+
+
+(define a (list "asdasd" "\n" "sadad"))
 |#
-
-
