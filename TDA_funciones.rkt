@@ -2,14 +2,11 @@
 (require "TDA_repositorios.rkt")
 (require "TDA_otros.rkt")
 (require "TDA_commit.rkt")
-;TDA Comandos: nos permiten trabajar entre las zonas de trabajo, por lo que seran puramente funciones
-
-
 
 ;-----------------------------------------------------------------------GIT---------------------------------------------------------------------------------------;
 ;Funcion currificada que recive una funcion(comando) con los parametros propios de esta funcion
-;Entrada: funcion que representa un comando de git, parametro de entrada del comando, repositorio
-;Salida: comando con los parametros ingresados
+;Entrada: parametro de entrada del comando, repositorio en donde se aplican las funciones
+;Salida: funcion con los parametros ingresados
 (define git (lambda (funcion)
               (lambda (parametros)
                 (funcion parametros)    
@@ -77,8 +74,8 @@
     )
 ) 
 
-;Funcion que crea un repositorio con un registro de la funcion "commit"
-;Entrada: mensaje descriptivo, repositorio (currificada)
+;Funcion que crea un repositorio aplicando la funcion commit dejando registro de la funcion "commit"
+;Entrada: mensaje descriptivo, repositorio con las zonas de trabajo 
 ;Salida: si los datos de entrada son correctos pregunta si el index esta vacio. Si se encuentra vacio retorna zonas sin cambios, sino retorna una nueva version del repositorio.
 ;        si los datos de entrada no son correctos retorna un mensaje
 (define commit (lambda (mensaje)
@@ -93,18 +90,82 @@
               )
       ) 
 )
-;--------------------------------------------------------------------PUSH----------------------------------------------------------------------------------------;
-;Funcion que envia todos los commits en el repositorio local al repositorio remoto
-;Entrada: zonas
+;-----------------------------------------------------------------------PUSH-------------------------------------------------------------------------------------;
+;Funcion que envia todos los commits en el repositorio local al repositorio remoto dejando un registro de la funcion
+;Entrada: repositorio con las zonas de trabajo
 ;Salida: zonas con los cambios guardados y un registro de la funcion "push"
-(define push (lambda (zonas)(rep_set_funciones (rep_set_remote_rep zonas (rep_get_local_rep zonas)) '("push"))))
+(define push (lambda (zonas)
+               (if (repository? zonas)
+                     (rep_set_funciones (rep_set_remote_rep zonas (rep_get_local_rep zonas)) (append (rep_get_funciones zonas)'("push")));Se deja registro de la funcion
+                     "Error en el ingreso de datos"
+               )
+       )
+)
 ;--------------------------------------------------------------------PULL----------------------------------------------------------------------------------------;
+;Funcion que revisa todos los archivos recursivamente en un commit y los compara con los archivos en una lista,
+;  si el archivo no se encuentra en la lista se ingresa en esta. Se utiliza recursion con cola
+;Entrada: archivos de un commit, lista con archivos sin repetir
+;Salida: lista con los archivos del commit que no se encontraban en esta
+(define sacar_archivos (lambda (archivos_commit lista_archivos)
+                       (if (null? archivos_commit) ;Si se revisaron todos los archivos en el commit
+                             lista_archivos ;Retorna la lista con archivos
+                             (sacar_archivos (cdr archivos_commit)(ingresar_archivo_lista (car archivos_commit) lista_archivos))
+                       )
+           )
+)
+
+;Funcion que revisa cada commit y busca todos los archivos que esten en el repositorio remoto sin repeticiones
+;Entrada: repositorio remoto (commits) y lista que contendra todos los archivos
+;Salida: lista con los archivos sin repeticion
+(define sacar_archivos_commit (lambda (commits lista_archivos)
+               (if (null? commits) ;Si se revisaron todos los commits
+                       lista_archivos
+                      (sacar_archivos_commit (cdr commits)(sacar_archivos (com_get_archivos (car commits)) lista_archivos))
+                )        
+       )
+)
+
+;Funcion que crea un repositorio nuevo, mandando los archivos guardados en el repositorio remoto al workspace
+;   ademas de mandar todos los commits guardados en el repositorio remoto al repositorio local
+;Entrada: repositorio con las zonas de trabajo
+;Salida: nuevo repositorio con archivos ingresados al workspace y commits en el repositorio local
+(define pull_archivos (lambda (zonas)
+                (rep_set_local_rep (rep_set_workspace zonas (sacar_archivos_commit (rep_get_remote_rep zonas) '() ) ) (rep_get_remote_rep zonas))      
+       )
+)
+
+;Funcion que crea un repositorio aplicando la funcion pull dejando registro de la funcion
+;Entrada: repositorio con las zonas de trabajo
+;Salida: si los datos de entrada son correctos pregunta si el repositorio remoto esta vacio. Si se encuentra vacio retorna zonas sin cambios, sino retorna una nueva version del repositorio.
+;        si los datos de entrada no son correctos retorna un mensaje 
+(define pull (lambda (zonas)
+              (if (repository? zonas) ;Pregunta si el dato ingresado es un repositorio
+                      (if (null? (rep_get_remote_rep zonas)) ;Si el repositorio remoto esta vacio retorna las zonas sin cambios
+                          zonas
+                          (rep_set_funciones (pull_archivos zonas) (append (rep_get_funciones zonas)'("pull"))) ;Se deja registro de la funcion
+                      )
+                      "Error en el ingreso de datos"
+               )
+       )
+)
 
 
+#| probando con funciones
+(define repo1 (list "master" '("hola.c") '("hola.c") '() '() '("add")))
+(define repo2 '("master" ("hola.c") () (("Angel" 3447 "Saturday, May 30th, 2020 12:13:24am" "Micom" ("hola.c") 0)) () ("add" "commit")))
+(define repo3 '("master"
+  ("hola.c")
+  ()
+  (("Angel" 3447 "Saturday, May 30th, 2020 12:13:24am" "Micom" ("hola.c") 0))
+  (("Angel" 3447 "Saturday, May 30th, 2020 12:13:24am" "Micom" ("hola.c") 0))
+  ("add" "commit" "push")))
+
+(define repo4 '("master"
+  ("hola.c")
+  ()
+  (("Angel" 3447 "Saturday, May 30th, 2020 12:13:24am" "Micom" ("hola.c") 0))
+  (("Angel" 3447 "Saturday, May 30th, 2020 12:13:24am" "Micom" ("hola.c") 0))
+  ("add" "commit" "push" "pull")))
+|#
 
 
-
-;(rep_set_index zonas archivos)
-;(((git add)'("asd" "asd"))repo1)
-
-(define repo1 (list "master" '("asd" "str1" "str2") '("str1") '() '() '("add")))

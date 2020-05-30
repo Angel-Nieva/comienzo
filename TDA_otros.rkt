@@ -1,6 +1,6 @@
 #lang racket
 (provide lista_string? current-date date->string get-n-lista)
-(provide comparar_archivos_lista get-last-lista)
+(provide comparar_archivos_lista get-last-lista ingresar_archivo_lista buscar_archivo_lista)
 
 
 
@@ -30,9 +30,10 @@
 )
 (define get-n-lista (lambda (lista n)(obtener_elemento_lista lista n 0))); Se encapsula la funcion anterior fijando el contador en 0
 
+;Funcion para obtener el ultimo elemento de una lista
 (define get-last-lista-no-encapsulada (lambda (lista)(if (null? (cdr lista)) (car lista) (get-last-lista-no-encapsulada(cdr lista)))))
-
-(define get-last-lista (lambda (lista) (if (null? lista) '() (get-last-lista-no-encapsulada lista))))
+;Funcion para obtener el ultimo elemento de una lista, en caso de que la lista este vacia retorna una lista vacia
+(define get-last-lista (lambda (lista) (if (null? lista) '() (get-last-lista-no-encapsulada lista)))) 
 
 ;Funcion que recorre recursivamente(normal) una lista y compara cada elemento con un string
 ;Entrada: workspace, string
@@ -56,8 +57,11 @@
            )
 )
 
-
-
-(define a (list "a" "b" "d" "asd" "asd"))
-
-(define lis (list "d"))
+;Funcion que ingresa un archivo en una lista de archivos siempre que este no se encuentre dentro
+(define ingresar_archivo_lista (lambda (archivo lista)
+                       (if (buscar_archivo_lista archivo lista) ;Si el archivo se encuentra en la lista o el archivo es null
+                           lista ;Retorna la lisa sin cambios
+                           (append lista (list archivo)) ;Agrega el archivo a la lista
+                       )                    
+          )
+)
