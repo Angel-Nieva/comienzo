@@ -149,37 +149,45 @@
         )
 )
 ;------------------------------------------------------------------ZONAS->STRING---------------------------------------------------------------------------------;
-;(define entregar-visualizacion)
-;(define mostrar-remote (lambda (zonas)(mostrar_index zonas (append '("\nREPOSITORIO LOCAL:\n")(rep_get_local_rep zonas)))))
-;(define mostrar-local (lambda (zonas)(mostrar_index zonas (append '("\nREPOSITORIO LOCAL:\n")(rep_get_local_rep zonas)))))
-;(define mostrar-index (lambda (zonas)(mostrar_index zonas (append '("\nINDEX:\n")(rep_get_index zonas)))))
-;(define mostrar-workspace (lambda (zonas)(mostrar_index zonas (append '("WORKSPACE:\n")(rep_get_workspace zonas)))))
-(define mostar_archivos (lambda (zona archivos)
-                  (if (null? zona)
-                      (append archivos '("\n"))
-                      (mostar_archivos (cdr zona) (append archivos '("\n") (list (car zona))))
-                  )
-         )
+;Funcion que transforma los archivos dentro del workspace/index en un string posible de visualizar. Utiliza recursion de cola para recorrer y guardar los archivos.
+;Entrada: workspace o index, string donde guardar los archivos 
+;Salida: string con los archivos separados por una linea
+(define mostrar_archivos (lambda (zona string)
+             (if (null? zona)
+                 string
+                 (mostrar_archivos (cdr zona) (string-append string (car zona) " \n"))
+              )
+        )
 )
 
-(define mostar_commits (lambda (zona commits)
-                  (if (null? zona)
-                      (append commits '("\n"))
-                      (mostar_commits (cdr zona) (append commits '("\n") (list (car zona))))
-                  )
-         )
+;Funcion que transforma los commits dentro del repositorio local/remoto en un string posible de visualizar. Utiliza recursion de cola para recorrer y guardar los commits.
+;Entrada: repositorio local o remoto, string donde guardar los commits 
+;Salida: string con los commits separados por una linea
+(define mostrar_commits (lambda (zona string)
+             (if (null? zona)
+                 string
+                 (mostrar_commits (cdr zona) (string-append string (commit->string (car zona)) "\n"))
+              )
+        )
 )
 
+;Funcion que transforma un commit en un string posible de visualizar
+;Entrada: repositorio
+;Salida: string
 (define mostrar_zonas (lambda (zonas)
-             (append '("====================================================================================================================================================================") 
-                     '("\nWORKSPACE:\n") (mostar_archivos (rep_get_workspace zonas) '())
-                     '("\nINDEX:\n") ( mostar_archivos (rep_get_index zonas) '())
-                     '("\nREPOSITORIO LOCAL:\n")(mostar_commits (rep_get_local_rep zonas) '())
-                     '("\nREPOSITORIO REMOTO:\n")(mostar_commits (rep_get_local_rep zonas) '())
-                     '("\n=====================================================================================================================================================================") 
+             (string-append "====================================================================================================================================================================" 
+                     "\nWORKSPACE:\n" (mostrar_archivos (rep_get_workspace zonas) "")
+                     "\nINDEX:\n" (mostrar_archivos (rep_get_index zonas) "")
+                     "\nREPOSITORIO LOCAL:\n" (mostrar_commits (rep_get_local_rep zonas) "")
+                     "\nREPOSITORIO REMOTO:\n" (mostrar_commits (rep_get_local_rep zonas) "")
+                     "\n=====================================================================================================================================================================" 
               )    
       )
 )
+
+;Funcion que entrega por pantalla una representacion de un repositorio
+;Entrada: repositorio
+;salida: string que pasa por la funcion display para ser visualizado 
 (define zonas->string (lambda (zonas)
                (if (repository? zonas)         
                  (display (mostrar_zonas zonas))
@@ -187,7 +195,7 @@
                )  
         )
 )
-#|
+
 (define repo1 (list "master" '("hola.c") '("hola.c") '() '() '("add")))
 (define repo2 '("master" ("hola.c") () (("Angel" 3447 "Saturday, May 30th, 2020 12:13:24am" "Micom" ("hola.c") 0)) () ("add" "commit")))
 (define repo3 '("master"
@@ -206,4 +214,3 @@
 
 
 (define a (list "asdasd" "\n" "sadad"))
-|#

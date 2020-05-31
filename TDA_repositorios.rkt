@@ -35,6 +35,7 @@
        )
 )
 
+
 ;----------------------------------------------------------------PERTENENCIA-------------------------------------------------------------------------------------;
 
 ;Funciones que verifican si un dato ingresado corresponde a un workspace,index,local repository,remote repository,rama,lista funciones o repositorio
@@ -56,7 +57,7 @@
       )
 )
 
-;----------------------------------------------------------------SELECTORES-------------------------------------------------------------------------------;
+;----------------------------------------------------------------SELECTORES--------------------------------------------------------------------------------------;
 ;Funciones que nos retornan un elemento del repositorio
 ;Entrada: repositorio
 ;Salida: ramificacion,workspace,repositorio local,repositorio remoto o funciones, null en caso de que la entrada no corresponda a un repositorio
@@ -67,7 +68,7 @@
 (define rep_get_remote_rep (lambda (repositorio)(if (repository? repositorio) (get-n-lista repositorio 4) null)))
 (define rep_get_funciones (lambda (repositorio)(if (repository? repositorio) (get-n-lista repositorio 5) null)))
 
-;----------------------------------------------------------------MODIFICADORES----------------------------------------------------------------------------;
+;----------------------------------------------------------------MODIFICADORES-----------------------------------------------------------------------------------;
 ;Funciones que crean un nuevo repositorio con un elemento cambiado, ya sea ramificacion,workspace,index,repositorio local,repositorio remoto o lista de funciones.
 ;Entrada: nueva ramificacion,workspace,index,repositorio local,repositorio remoto o lista de funciones
 ;Salida: Nuevo repositorio actualizado, null en caso de que la entrada no corresponda a un repositorio
@@ -101,7 +102,6 @@
              (cons_repositorio (rep_get_ramificacion repo)(rep_get_workspace repo)(rep_get_index repo)(rep_get_local_rep repo)(rep_get_remote_rep repo) new_funciones)                                 
        )
 )
-
 
 
 
