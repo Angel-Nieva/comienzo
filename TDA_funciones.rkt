@@ -2,6 +2,7 @@
 (require "TDA_repositorios.rkt")
 (require "TDA_otros.rkt")
 (require "TDA_commit.rkt")
+(provide git add commit push pull zonas->string)
 
 ;-----------------------------------------------------------------------GIT---------------------------------------------------------------------------------------;
 ;Funcion currificada que recive una funcion(comando) con los parametros propios de esta funcion
