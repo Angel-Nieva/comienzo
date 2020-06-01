@@ -196,22 +196,3 @@
                )  
         )
 )
-
-(define repo1 (list "master" '("hola.c") '("hola.c") '() '() '("add")))
-(define repo2 '("master" ("hola.c") () (("Angel" 3447 "Saturday, May 30th, 2020 12:13:24am" "Micom" ("hola.c") 0)) () ("add" "commit")))
-(define repo3 '("master"
-  ("hola.c")
-  ()
-  (("Angel" 3447 "Saturday, May 30th, 2020 12:13:24am" "Micom" ("hola.c") 0))
-  (("Angel" 3447 "Saturday, May 30th, 2020 12:13:24am" "Micom" ("hola.c") 0))
-  ("add" "commit" "push")))
-
-(define repo4 '("master"
-  ("hola.c" "chao.c" "mundo.c" "saul.c")
-  ()
-  (("Angel" 3447 "Saturday, May 30th, 2020 12:13:24am" "Micom" ("hola.c") 0)("Angel" 3447 "Saturday, May 30th, 2020 12:13:24am" "Micom" ("hola.c") 0)("Angel" 3447 "Saturday, May 30th, 2020 12:13:24am" "Micom" ("hola.c") 0)("Angel" 3447 "Saturday, May 30th, 2020 12:13:24am" "Micom" ("hola.c") 0))
-  (("Angel" 3447 "Saturday, May 30th, 2020 12:13:24am" "Micom" ("hola.c") 0)("Angel" 3447 "Saturday, May 30th, 2020 12:13:24am" "Micom" ("hola.c") 0))
-  ("add" "commit" "push" "pull")))
-
-
-(define a (list "asdasd" "\n" "sadad"))

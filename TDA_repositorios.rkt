@@ -102,11 +102,3 @@
              (cons_repositorio (rep_get_ramificacion repo)(rep_get_workspace repo)(rep_get_index repo)(rep_get_local_rep repo)(rep_get_remote_rep repo) new_funciones)                                 
        )
 )
-
-
-
-
-(define repo1 (cons_repositorio "master" '("asd" "asd") '() '() '() '("add" "push" "commit")))
-
-
-                              

@@ -65,10 +65,3 @@
                  )
          )
 )
-
-
-
-;(define a (list "Angel" 432 "Monday, May 18th, 2020 7:30:18pm" "mi primer commit" '("str1") 0) )
-;(define b (list "Marcelo" 432 "Monday, May 18th, 2020 7:30:18pm" "mi primer commit" '("str1") 0))
-(define commit1 (cons_commit "Angel" "Mi primer commit" '("str1" "str2" "str3") 0))
-(define p (list '("str1") commit1))
